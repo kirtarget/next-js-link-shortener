@@ -66,3 +66,10 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
+model ShortLink {
+    id String @id @default(cuid())
+    name String @default("Безымянная")
+    link String
+    shortLink String
+    clicks Int
+ }
