@@ -7,7 +7,6 @@ export type mainTableProps = {
 }[];
 
 const MainTable = ({ data }: { data: mainTableProps }) => {
-  if (data.length == 0) return;
   return (
     <div className="overflow-x-auto">
       <table className="table table-zebra border ">
