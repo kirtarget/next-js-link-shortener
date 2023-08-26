@@ -1,9 +1,3 @@
-import { signIn, signOut, useSession } from "next-auth/react";
-import type {
-  InferGetServerSidePropsType,
-  GetServerSideProps,
-  GetStaticProps,
-} from "next";
 import Head from "next/head";
 import { api } from "~/utils/api";
 import MainForm from "./components/MainForm";
