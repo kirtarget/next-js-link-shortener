@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { api } from "~/utils/api";
 
 type dataType = {
   name: string;
+  dateCreated: Date;
   link: string;
 };
 
@@ -10,15 +12,19 @@ type dataType = {
 // }
 
 const MainForm = () => {
-  const [name, setName] = useState<string | null>(null);
-  const [link, setLink] = useState<string | null>(null);
-  const [isError, setIsError] = useState<boolean | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [dbData, setDbData] = useState<dataType | null>(null);
+  const [name, setName] = useState<string>("");
+  const [link, setLink] = useState<string>("");
+  const [isError, setIsError] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [dbData, setDbData] = useState<dataType>({
+    name,
+    link,
+    dateCreated: new Date(),
+  });
 
   const errorHandler = () => {
-    setIsError(null);
-    setError(null);
+    setIsError(false);
+    setError("");
     if (
       typeof name == null ||
       name?.length == 0 ||
@@ -29,11 +35,13 @@ const MainForm = () => {
       return;
     }
 
-    if (name!.length < 4 || name?.length == undefined) {
+    if (name.length < 4 || name?.length == undefined) {
       setIsError(true);
       setError("Имя должно состоять минимум из 4 знаков");
     }
   };
+
+  const sendLinkMutation = api.links.sendURL.useMutation();
 
   const onSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault();
@@ -43,9 +51,12 @@ const MainForm = () => {
 
     if (typeof name != null && typeof link !== null) {
       setDbData({
-        name,
-        link,
+        ...dbData,
+        dateCreated: new Date(),
       } as dataType);
+
+      if (!isError) sendLinkMutation.mutate(dbData);
+      return;
     }
   };
 
@@ -66,8 +77,15 @@ const MainForm = () => {
           id="nameInput"
           placeholder="ИМЯ БЛОГЕРА/ПРОМОКОД"
           className="input input-bordered my-2 w-full bg-white"
-          onChange={(event) => setName(event.target.value)}
+          onChange={(event) => {
+            setName(event.target.value);
+            setDbData({
+              ...dbData,
+              name: event.target.value,
+            });
+          }}
         />
+
         <label htmlFor="linkInput" className="label">
           Вставьте ссылку
         </label>
@@ -77,13 +95,20 @@ const MainForm = () => {
           id="linkInput"
           placeholder="https://sotkaonline.ru/"
           className="input input-bordered my-2 w-full bg-white"
-          onChange={(event) => setLink(event.target.value)}
+          onChange={(event) => {
+            setLink(event.target.value);
+            setDbData({
+              ...dbData,
+              link: event.target.value,
+            });
+          }}
         />
+
         <p className=" mx-auto my-2 text-lg text-rose-600">{error}</p>
+
         <button type="submit" className="btn">
           Сократить
         </button>
-        {/* <p>{JSON.stringify(dbData)}</p> */}
       </form>
     </div>
   );

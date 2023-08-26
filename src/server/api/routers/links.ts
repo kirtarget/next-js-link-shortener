@@ -6,20 +6,23 @@ import {
 } from "~/server/api/trpc";
 
 export const linksRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-
   getAll: publicProcedure.query(async ({ ctx }) => {
-    const data = await ctx.prisma.shortLink.findMany();
-    return data;
+    return await ctx.prisma.shortLink.findMany();
   }),
 
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
-  }),
+  sendURL: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        link: z.string(),
+        dateCreated: z.date(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.shortLink.create({
+        data: {
+          ...input,
+        },
+      });
+    }),
 });

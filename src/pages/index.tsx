@@ -5,17 +5,13 @@ import type {
   GetStaticProps,
 } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import { api } from "~/utils/api";
 import MainForm from "./components/MainForm";
 import MainTable from "./components/MainTable";
-import { testData } from "./components/testData";
-import { useState } from "react";
-import type { mainTableProps } from "./components/MainTable";
 
 // export default function Home({data}:{data:mainTableProps}) {
 export default function Home() {
-  const data = api.links.getAll.useQuery();
+  const { data } = api.links.getAll.useQuery();
 
   return (
     <>
@@ -32,7 +28,7 @@ export default function Home() {
           <div className="w-full">
             <MainForm />
             {/* {JSON.stringify(data)} */}
-            {data.data ? <MainTable data={data.data} /> : <p>загрузка...</p>}
+            {data ? <MainTable data={data} /> : <p>загрузка...</p>}
           </div>
 
           {/* <div className="flex flex-col items-center gap-2">

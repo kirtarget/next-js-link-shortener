@@ -72,5 +72,5 @@ model ShortLink {
     link String @default("Ошибка")
     shortLink String @default("Доделать функцию")
     clicks Int @default(0)
-    dateCreated DateTime @default(now())
+    dateCreated DateTime @default(now()) 
  }

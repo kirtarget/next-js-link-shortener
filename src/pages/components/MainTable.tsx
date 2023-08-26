@@ -7,7 +7,6 @@ export type mainTableProps = {
 }[];
 
 const MainTable = ({ data }: { data: mainTableProps }) => {
-  console.log(data);
   if (data.length == 0) return;
   return (
     <div className="overflow-x-auto">
