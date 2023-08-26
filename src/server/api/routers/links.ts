@@ -14,8 +14,9 @@ export const linksRouter = createTRPCRouter({
       };
     }),
 
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.example.findMany();
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    const data = await ctx.prisma.shortLink.findMany();
+    return data;
   }),
 
   getSecretMessage: protectedProcedure.query(() => {

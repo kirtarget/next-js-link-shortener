@@ -69,8 +69,8 @@ model VerificationToken {
 model ShortLink {
     id String @id @default(cuid())
     name String @default("Безымянная")
-    link String
-    shortLink String
-    clicks Int
-    dateCreated DateTime
+    link String @default("Ошибка")
+    shortLink String @default("Доделать функцию")
+    clicks Int @default(0)
+    dateCreated DateTime @default(now())
  }
