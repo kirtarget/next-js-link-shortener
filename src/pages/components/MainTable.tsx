@@ -20,8 +20,8 @@ const MainTable = ({ data }: { data: mainTableProps }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((link) => (
-            <tr key={link.name}>
+          {data?.map((link) => (
+            <tr key={link.dateCreated.toISOString()}>
               <th>{link.name}</th>
               <td>{link.link}</td>
               <td>{link.shortLink}</td>
