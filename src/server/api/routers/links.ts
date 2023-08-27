@@ -6,12 +6,28 @@ export const linksRouter = createTRPCRouter({
     return await ctx.prisma.shortLink.findMany();
   }),
 
+  getOne: publicProcedure
+    .input(
+      z.object({
+        shortLink: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const link = await ctx.prisma.shortLink.findUnique({
+        where: {
+          shortLink: input?.shortLink || "404",
+        },
+      });
+      return link?.link;
+    }),
+
   sendURL: publicProcedure
     .input(
       z.object({
         name: z.string(),
         link: z.string(),
         dateCreated: z.date(),
+        shortLink: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {

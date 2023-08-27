@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { api } from "~/utils/api";
+import { createId } from "@paralleldrive/cuid2";
 
 type dataType = {
   name: string;
   dateCreated: Date;
   link: string;
+  shortLink: string;
 };
 
 // export type MainFormProps = {
@@ -49,6 +51,7 @@ const MainForm = () => {
       setDbData({
         ...dbData,
         dateCreated: new Date(),
+        shortLink: createId().slice(16),
       } as dataType);
 
       if (!isError) sendLinkMutation.mutate(dbData!);

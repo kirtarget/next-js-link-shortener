@@ -2,9 +2,10 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 import MainForm from "./components/MainForm";
 import MainTable from "./components/MainTable";
+import type { mainTableProps } from "./components/MainTable";
 
 export default function Home() {
-  const { data } = api.links.getAll.useQuery();
+  const { data } = api.links.getAll.useQuery() as { data: mainTableProps };
 
   return (
     <>
