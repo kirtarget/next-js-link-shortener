@@ -1,6 +1,6 @@
 import { httpBatchLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
-import { AppRouter } from "~/server/api/root";
+import type { AppRouter } from "~/server/api/root";
 
 function getBaseUrl() {
   if (typeof window !== "undefined")
@@ -19,7 +19,7 @@ function getBaseUrl() {
 export const trpc = createTRPCNext<AppRouter>({
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  config(opts) {
+  config() {
     return {
       links: [
         httpBatchLink({

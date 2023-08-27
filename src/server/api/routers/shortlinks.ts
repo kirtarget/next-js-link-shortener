@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 export const linksRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
@@ -56,7 +60,7 @@ export const linksRouter = createTRPCRouter({
       return link?.link;
     }),
 
-  sendURL: publicProcedure
+  sendURL: protectedProcedure
     .input(
       z.object({
         name: z.string(),
