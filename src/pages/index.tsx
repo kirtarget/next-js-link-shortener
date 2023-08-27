@@ -10,7 +10,7 @@ import { Toaster } from "react-hot-toast";
 export default function Home() {
   const session = useSession();
   const { data } = api.links.getAll.useQuery() as { data: mainTableProps };
-  // const refetch = api.links.getAll.useQuery().refetch;
+  const refetch = api.links.getAll.useQuery().refetch;
 
   return (
     <>
@@ -38,13 +38,16 @@ export default function Home() {
                   <>
                     <MainForm />
                     {data ? (
-                      <MainTable
-                        data={data?.sort((a, b) => {
-                          return (
-                            a.dateCreated.getTime() - b.dateCreated.getTime()
-                          );
-                        })}
-                      />
+                      <>
+                        <button onClick={() => refetch()}>🔄</button>
+                        <MainTable
+                          data={data?.sort((a, b) => {
+                            return (
+                              a.dateCreated.getTime() - b.dateCreated.getTime()
+                            );
+                          })}
+                        />
+                      </>
                     ) : (
                       <span className="loading loading-spinner loading-md mt-4 text-info"></span>
                     )}

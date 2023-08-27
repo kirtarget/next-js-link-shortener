@@ -69,7 +69,6 @@ const MainForm = () => {
     if (isError) return;
 
     sendLinkMutation.mutate(dbData!);
-    // refetch();
     return;
   };
 
