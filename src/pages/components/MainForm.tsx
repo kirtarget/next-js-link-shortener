@@ -69,12 +69,14 @@ const MainForm = () => {
     if (isError) return;
 
     sendLinkMutation.mutate(dbData!);
+    // refetch();
     return;
   };
 
   return (
     <div>
       <form
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onSubmit={onSubmitHandler}
         className={`mb-4  rounded border ${
           isError ? "border-rose-500" : ""

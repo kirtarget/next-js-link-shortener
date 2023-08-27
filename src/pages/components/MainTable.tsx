@@ -1,3 +1,5 @@
+import { toast } from "react-hot-toast";
+
 export type mainTableProps = {
   name: string;
   link: string;
@@ -36,6 +38,7 @@ const MainTable = ({ data }: { data: mainTableProps }) => {
                             : "https://sotka.xyz"
                         }/r/${link.shortLink}`
                       );
+                      toast.success("Успешно скопировано");
                       return;
                     }}
                     className=" btn btn-xs mx-2 aspect-square border-none bg-slate-300 p-0"

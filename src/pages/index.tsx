@@ -5,10 +5,12 @@ import MainForm from "./components/MainForm";
 import MainTable from "./components/MainTable";
 import type { mainTableProps } from "./components/MainTable";
 import { signIn, useSession, signOut } from "next-auth/react";
+import { Toaster } from "react-hot-toast";
 
 export default function Home() {
   const session = useSession();
   const { data } = api.links.getAll.useQuery() as { data: mainTableProps };
+  // const refetch = api.links.getAll.useQuery().refetch;
 
   return (
     <>
@@ -19,6 +21,9 @@ export default function Home() {
       </Head>
       {session.status !== "unauthenticated" ? (
         <>
+          <div>
+            <Toaster position="bottom-right" reverseOrder={false} />
+          </div>
           <main
             data-theme="light"
             className="flex min-h-screen flex-col items-center "
@@ -34,7 +39,7 @@ export default function Home() {
                     <MainForm />
                     {data ? (
                       <MainTable
-                        data={data.sort((a, b) => {
+                        data={data?.sort((a, b) => {
                           return (
                             a.dateCreated.getTime() - b.dateCreated.getTime()
                           );
