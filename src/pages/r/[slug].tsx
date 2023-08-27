@@ -10,13 +10,9 @@ const Slug = () => {
     setDidMount(true);
   }, []);
 
-  if (didMount && link.data) void router.push(link?.data ?? "/404");
+  if (didMount && link.data) void router.replace(link?.data ?? "/404");
 
-  return (
-    <div>
-      <p>{link.data}</p>
-    </div>
-  );
+  return;
 };
 
 export default Slug;

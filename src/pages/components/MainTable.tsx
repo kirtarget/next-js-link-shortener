@@ -30,7 +30,7 @@ const MainTable = ({ data }: { data: mainTableProps }) => {
                     // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     onClick={async () => {
                       await navigator.clipboard.writeText(
-                        `http://localhost:3000/r/${link.shortLink}`
+                        `${process.env.NEXTAUTH_URL}/r/${link.shortLink}`
                       );
                       return;
                     }}
