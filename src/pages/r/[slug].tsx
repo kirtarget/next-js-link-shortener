@@ -10,6 +10,15 @@ export const getServerSideProps = async (context: NextApiRequest) => {
     },
   });
 
+  await prisma.shortLink.update({
+    where: {
+      shortLink: slug,
+    },
+    data: {
+      clicks: { increment: 1 },
+    },
+  });
+
   const encodedUrl = encodeURI(url!.link);
 
   if (url?.link) {
