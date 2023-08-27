@@ -19,7 +19,10 @@ export default function Home() {
       </Head>
       {session.status !== "unauthenticated" ? (
         <>
-          <main className="flex min-h-screen flex-col items-center bg-slate-100">
+          <main
+            data-theme="light"
+            className="flex min-h-screen flex-col items-center "
+          >
             <div className="flex w-full flex-col items-center justify-center gap-12 px-4 py-16 ">
               <h1 className=" text-lg font-extrabold text-slate-900 ">
                 Сокращатель <span className="  text-blue-400">СОТКА</span>{" "}
@@ -30,7 +33,13 @@ export default function Home() {
                   <>
                     <MainForm />
                     {data ? (
-                      <MainTable data={data} />
+                      <MainTable
+                        data={data.sort((a, b) => {
+                          return (
+                            a.dateCreated.getTime() - b.dateCreated.getTime()
+                          );
+                        })}
+                      />
                     ) : (
                       <span className="loading loading-spinner loading-md mt-4 text-info"></span>
                     )}
@@ -41,9 +50,12 @@ export default function Home() {
                     админа, для этого напишите в телеграм @kirtarget
                   </p>
                 )}
-              </div>{" "}
+              </div>
             </div>
-            <button className="btn btn-error btn-xs" onClick={() => signOut()}>
+            <button
+              className="btn btn-error btn-xs left-0"
+              onClick={() => signOut()}
+            >
               Выйти
             </button>
           </main>

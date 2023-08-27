@@ -10,7 +10,7 @@ const MainTable = ({ data }: { data: mainTableProps }) => {
   return (
     <div className="w-full overflow-x-auto">
       <table className="table table-md border">
-        <thead className="text-slate-900">
+        <thead className="text-sm text-slate-900">
           <tr>
             <th>Название</th>
             <th>Длинная ссылка</th>

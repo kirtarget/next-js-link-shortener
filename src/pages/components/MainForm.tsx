@@ -18,7 +18,12 @@ const MainForm = () => {
   const [link, setLink] = useState<string | null>(null);
   const [isError, setIsError] = useState<boolean | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [dbData, setDbData] = useState<dataType | null>(null);
+  const [dbData, setDbData] = useState<dataType | null>({
+    name: "",
+    link: "",
+    dateCreated: new Date(),
+    shortLink: createId().slice(16),
+  });
 
   const errorHandler = () => {
     setIsError(false);
@@ -37,6 +42,16 @@ const MainForm = () => {
       setIsError(true);
       setError("Имя должно состоять минимум из 4 знаков");
     }
+
+    if (link!.length < 10 || link == undefined) {
+      setIsError(true);
+      setError("Введите ссылку");
+    }
+
+    if (dbData?.link === undefined || dbData.name === undefined) {
+      setIsError(true);
+      setError("Введите ссылку и её название");
+    }
   };
 
   const sendLinkMutation = api.links.sendURL.useMutation();
@@ -45,17 +60,16 @@ const MainForm = () => {
     event.preventDefault();
     errorHandler();
 
+    setDbData({
+      ...dbData,
+      dateCreated: new Date(),
+      shortLink: createId().slice(16),
+    } as dataType);
+
     if (isError) return;
 
-    if (typeof name != null && typeof link !== null) {
-      setDbData({
-        ...dbData,
-        dateCreated: new Date(),
-        shortLink: createId().slice(16),
-      } as dataType);
-
-      if (!isError) sendLinkMutation.mutate(dbData!);
-    }
+    sendLinkMutation.mutate(dbData!);
+    return;
   };
 
   return (
@@ -103,24 +117,6 @@ const MainForm = () => {
           }}
         />
 
-        {isError && (
-          <div className="alert alert-error">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 shrink-0 stroke-current"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>{error}</span>
-          </div>
-        )}
         {sendLinkMutation.isError && (
           <div className="alert alert-error">
             <svg
@@ -136,7 +132,7 @@ const MainForm = () => {
                 d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <span>{sendLinkMutation.error.message}</span>
+            <span>{error}</span>
           </div>
         )}
 
