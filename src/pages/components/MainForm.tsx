@@ -4,7 +4,7 @@ import { createId } from "@paralleldrive/cuid2";
 
 type dataType = {
   name: string;
-  dateCreated: Date;
+
   link: string;
   shortLink: string;
 };
@@ -21,7 +21,7 @@ const MainForm = () => {
   const [dbData, setDbData] = useState<dataType | null>({
     name: "",
     link: "",
-    dateCreated: new Date(),
+
     shortLink: createId().slice(16),
   });
 

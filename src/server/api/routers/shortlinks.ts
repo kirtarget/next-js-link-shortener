@@ -65,7 +65,6 @@ export const linksRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         link: z.string(),
-        dateCreated: z.date(),
         shortLink: z.string(),
       })
     )
