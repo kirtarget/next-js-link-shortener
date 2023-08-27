@@ -3,7 +3,6 @@ import { api } from "~/utils/api";
 import MainForm from "./components/MainForm";
 import MainTable from "./components/MainTable";
 
-// export default function Home({data}:{data:mainTableProps}) {
 export default function Home() {
   const { data } = api.links.getAll.useQuery();
 
@@ -15,52 +14,20 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center bg-slate-100">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
+        <div className="flex w-full flex-col items-center justify-center gap-12 px-4 py-16 ">
           <h1 className=" text-lg font-extrabold text-slate-900 ">
             Сокращатель <span className="  text-blue-400">СОТКА</span> ссылок
           </h1>
-          <div className="w-full">
+          <div className="w-full ">
             <MainForm />
-            {/* {JSON.stringify(data)} */}
-            {data ? <MainTable data={data} /> : <p>загрузка...</p>}
+            {data ? (
+              <MainTable data={data} />
+            ) : (
+              <span className="loading loading-spinner loading-md mt-4 text-info"></span>
+            )}
           </div>
-
-          {/* <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-              
-            </p>
-            <AuthShowcase />
-          </div> */}
         </div>
       </main>
     </>
   );
 }
-
-// function AuthShowcase() {
-//   const { data: sessionData } = useSession();
-
-//   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-//     undefined, // no input
-//     { enabled: sessionData?.user !== undefined }
-//   );
-
-//   return (
-//     <div className="flex flex-col items-center justify-center gap-4">
-//       <p className="text-center text-2xl text-white">
-//         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-//         <br/>
-//         {sessionData && <span>You are a {sessionData.user?.role}</span>}
-//         <br/>
-//         {secretMessage && <span> - {secretMessage}</span>}
-//       </p>
-//       <button
-//         className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-//         onClick={sessionData ? () => void signOut() : () => void signIn()}
-//       >
-//         {sessionData ? "Sign out" : "Sign in"}
-//       </button>
-//     </div>
-//   );
-// }

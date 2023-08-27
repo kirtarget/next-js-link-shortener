@@ -12,15 +12,11 @@ type dataType = {
 // }
 
 const MainForm = () => {
-  const [name, setName] = useState<string>("");
-  const [link, setLink] = useState<string>("");
-  const [isError, setIsError] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-  const [dbData, setDbData] = useState<dataType>({
-    name,
-    link,
-    dateCreated: new Date(),
-  });
+  const [name, setName] = useState<string | null>(null);
+  const [link, setLink] = useState<string | null>(null);
+  const [isError, setIsError] = useState<boolean | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [dbData, setDbData] = useState<dataType | null>(null);
 
   const errorHandler = () => {
     setIsError(false);
@@ -35,7 +31,7 @@ const MainForm = () => {
       return;
     }
 
-    if (name.length < 4 || name?.length == undefined) {
+    if (name!.length < 4 || name?.length == undefined) {
       setIsError(true);
       setError("Имя должно состоять минимум из 4 знаков");
     }
@@ -55,8 +51,7 @@ const MainForm = () => {
         dateCreated: new Date(),
       } as dataType);
 
-      if (!isError) sendLinkMutation.mutate(dbData);
-      return;
+      if (!isError) sendLinkMutation.mutate(dbData!);
     }
   };
 
@@ -66,7 +61,7 @@ const MainForm = () => {
         onSubmit={onSubmitHandler}
         className={`mb-4  rounded border ${
           isError ? "border-rose-500" : ""
-        } bg-slate-400 p-2 text-slate-900`}
+        } rounded-lg bg-blue-200 p-2 text-slate-900`}
       >
         <label htmlFor="nameInput" className="label">
           Введите название
@@ -75,12 +70,13 @@ const MainForm = () => {
           type="text"
           name="nameInput"
           id="nameInput"
-          placeholder="ИМЯ БЛОГЕРА/ПРОМОКОД"
+          placeholder="Чтобы проще искать потом"
           className="input input-bordered my-2 w-full bg-white"
           onChange={(event) => {
             setName(event.target.value);
+            setIsError(false);
             setDbData({
-              ...dbData,
+              ...dbData!,
               name: event.target.value,
             });
           }}
@@ -98,13 +94,67 @@ const MainForm = () => {
           onChange={(event) => {
             setLink(event.target.value);
             setDbData({
-              ...dbData,
+              ...dbData!,
               link: event.target.value,
             });
           }}
         />
 
-        <p className=" mx-auto my-2 text-lg text-rose-600">{error}</p>
+        {isError && (
+          <div className="alert alert-error">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 shrink-0 stroke-current"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>{error}</span>
+          </div>
+        )}
+        {sendLinkMutation.isError && (
+          <div className="alert alert-error">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 shrink-0 stroke-current"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>{sendLinkMutation.error.message}</span>
+          </div>
+        )}
+
+        {sendLinkMutation.isSuccess && (
+          <div className="alert alert-success">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 shrink-0 stroke-current"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>Ссылка сокращена!</span>
+          </div>
+        )}
 
         <button type="submit" className="btn">
           Сократить
