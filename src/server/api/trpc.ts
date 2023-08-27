@@ -14,9 +14,6 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 import { getServerAuthSession } from "~/server/auth";
 import { prisma } from "~/server/db";
-import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
-import { createServerSideHelpers } from "@trpc/react-query/server";
-import { AppRouter } from "./root";
 
 /**
  * 1. CONTEXT

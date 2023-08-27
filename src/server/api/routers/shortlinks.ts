@@ -1,15 +1,5 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { initTRPC } from "@trpc/server";
-
-const t = initTRPC.create();
-
-const router = t.router({
-  // Create procedure at path 'greeting'
-  greeting: t.procedure
-    .input(z.object({ name: z.string() }))
-    .query((opts) => `Hello ${opts.input.name}`),
-});
 
 export const linksRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {

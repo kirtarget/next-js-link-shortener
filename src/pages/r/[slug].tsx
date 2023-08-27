@@ -1,14 +1,9 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { api } from "~/utils/api";
-import { z } from "zod";
-import { PrismaClient } from "@prisma/client";
 import { prisma } from "../../server/db";
 import { createServerSideHelpers } from "@trpc/react-query/server";
-import { AppRouter } from "~/server/api/root";
 import { appRouter } from "~/server/api/root";
 import superjson from "superjson";
-import {
+import type {
   GetStaticPaths,
   GetStaticPropsContext,
   InferGetStaticPropsType,

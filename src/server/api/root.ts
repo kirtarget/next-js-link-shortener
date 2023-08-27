@@ -1,4 +1,4 @@
-import { linksRouter } from "~/server/api/routers/links";
+import { linksRouter } from "~/server/api/routers/shortlinks";
 import { createTRPCRouter } from "~/server/api/trpc";
 
 /**
