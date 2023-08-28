@@ -1,12 +1,5 @@
 import { toast } from "react-hot-toast";
-
-export type mainTableProps = {
-  name: string;
-  link: string;
-  shortLink: string;
-  clicks: number;
-  dateCreated: Date;
-}[];
+import type { mainTableProps } from "~/utils/app.types";
 
 const MainTable = ({ data }: { data: mainTableProps }) => {
   return (
@@ -35,7 +28,7 @@ const MainTable = ({ data }: { data: mainTableProps }) => {
                         `${
                           process.env.NODE_ENV === "development"
                             ? "http://localhost:3000"
-                            : "https://sotka.xyz"
+                            : process.env.VERCEL_URL
                         }/r/${link.shortLink}`
                       );
                       toast.success("Успешно скопировано");

@@ -1,13 +1,7 @@
 import { useState } from "react";
 import { api } from "~/utils/api";
 import { createId } from "@paralleldrive/cuid2";
-
-type dataType = {
-  name: string;
-
-  link: string;
-  shortLink: string;
-};
+import type { dataType } from "~/utils/app.types";
 
 // export type MainFormProps = {
 //     submitF: (e:React.FormEvent) => void
@@ -30,8 +24,8 @@ const MainForm = () => {
     const regex = new RegExp(
       /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
     );
-
     const validatedUri = encodedUri.match(regex);
+
     setIsError(false);
     setError("");
     if (

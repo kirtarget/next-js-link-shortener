@@ -3,9 +3,9 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 import MainForm from "./components/MainForm";
 import MainTable from "./components/MainTable";
-import type { mainTableProps } from "./components/MainTable";
 import { signIn, useSession, signOut } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
+import type { mainTableProps } from "~/utils/app.types";
 
 export default function Home() {
   const session = useSession();

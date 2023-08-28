@@ -3,7 +3,6 @@ import type { NextApiRequest } from "next";
 
 export const getServerSideProps = async (context: NextApiRequest) => {
   const slug = context.query.slug as string;
-
   const url = await prisma.shortLink.findUnique({
     where: {
       shortLink: slug,
