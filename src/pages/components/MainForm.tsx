@@ -158,7 +158,6 @@ const MainForm = () => {
         <button type="submit" className="btn">
           Сократить
         </button>
-        {JSON.stringify(dbData)}
       </form>
     </div>
   );
