@@ -26,6 +26,12 @@ const MainForm = () => {
   });
 
   const errorHandler = () => {
+    const encodedUri = encodeURI(link ?? "");
+    const regex = new RegExp(
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+    );
+
+    const validatedUri = encodedUri.match(regex);
     setIsError(false);
     setError("");
     if (
@@ -36,7 +42,12 @@ const MainForm = () => {
       setIsError(true);
       setError("Введите имя");
     }
-    if (link == undefined || link == null || link?.length < 10) {
+    if (
+      link == undefined ||
+      link == null ||
+      link?.length < 10 ||
+      !validatedUri
+    ) {
       setIsError(true);
       setError("Введите ссылку");
     }
@@ -78,6 +89,7 @@ const MainForm = () => {
           isError ? "border-rose-500" : ""
         } rounded-lg bg-blue-200 p-2 text-slate-900`}
       >
+        <p>{""}</p>
         <label htmlFor="nameInput" className="label">
           Введите название
         </label>
