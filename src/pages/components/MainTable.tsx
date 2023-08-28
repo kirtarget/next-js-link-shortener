@@ -28,7 +28,7 @@ const MainTable = ({ data }: { data: mainTableProps }) => {
                         `${
                           process.env.NODE_ENV === "development"
                             ? "http://localhost:3000"
-                            : process.env.VERCEL_URL
+                            : "https://sotka.xyz"
                         }/r/${link.shortLink}`
                       );
                       toast.success("Успешно скопировано");
