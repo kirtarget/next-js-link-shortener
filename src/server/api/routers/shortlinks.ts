@@ -17,49 +17,6 @@ export const linksRouter = createTRPCRouter({
     });
   }),
 
-  getOne: publicProcedure
-    .input(
-      z.object({
-        shortLink: z.string(),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const link = await ctx.prisma.shortLink.findUnique({
-        where: {
-          shortLink: input?.shortLink || "404",
-        },
-      });
-
-      await ctx.prisma.shortLink.update({
-        where: {
-          shortLink: input?.shortLink,
-        },
-        data: {
-          clicks: { increment: 1 },
-        },
-      });
-
-      return link?.link;
-    }),
-  incrementClick: publicProcedure
-    .input(
-      z.object({
-        shortLink: z.string(),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const link = await ctx.prisma.shortLink.update({
-        where: {
-          shortLink: input?.shortLink,
-        },
-        data: {
-          clicks: { increment: 1 },
-        },
-      });
-
-      return link?.link;
-    }),
-
   sendURL: protectedProcedure
     .input(
       z.object({

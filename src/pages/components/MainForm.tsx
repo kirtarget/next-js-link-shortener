@@ -22,7 +22,7 @@ const MainForm = () => {
     name: "",
     link: "",
 
-    shortLink: createId().slice(16),
+    shortLink: createId().slice(19),
   });
 
   const errorHandler = () => {
@@ -63,7 +63,6 @@ const MainForm = () => {
     setDbData({
       ...dbData,
       dateCreated: new Date(),
-      shortLink: createId().slice(16),
     } as dataType);
 
     if (isError) return;
@@ -159,6 +158,7 @@ const MainForm = () => {
         <button type="submit" className="btn">
           Сократить
         </button>
+        {JSON.stringify(dbData)}
       </form>
     </div>
   );
