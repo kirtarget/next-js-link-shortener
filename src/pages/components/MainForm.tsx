@@ -35,17 +35,15 @@ const MainForm = () => {
     ) {
       setIsError(true);
       setError("Введите имя");
-      return;
+    }
+    if (link == undefined || link == null || link?.length < 10) {
+      setIsError(true);
+      setError("Введите ссылку");
     }
 
     if (name!.length < 4 || name?.length == undefined) {
       setIsError(true);
       setError("Имя должно состоять минимум из 4 знаков");
-    }
-
-    if (link!.length < 10 || link == undefined) {
-      setIsError(true);
-      setError("Введите ссылку");
     }
 
     if (dbData?.link === undefined || dbData.name === undefined) {
