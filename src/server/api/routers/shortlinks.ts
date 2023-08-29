@@ -20,8 +20,8 @@ export const linksRouter = createTRPCRouter({
   sendURL: protectedProcedure
     .input(
       z.object({
-        name: z.string(),
-        link: z.string(),
+        name: z.string().min(4),
+        link: z.string().url(),
         shortLink: z.string(),
       })
     )

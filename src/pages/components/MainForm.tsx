@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import { createId } from "@paralleldrive/cuid2";
 import type { dataType } from "~/utils/app.types";
+import toast from "react-hot-toast";
 
 const slugGenerator = (): string => createId().slice(19);
 
@@ -16,6 +17,7 @@ const MainForm = ({ refetch }: { refetch: () => void }) => {
 
     shortLink: slugGenerator(),
   });
+  const { mutate, isSuccess } = api.links.sendURL.useMutation();
 
   const errorHandler = () => {
     const encodedUri = encodeURI(link ?? "");
@@ -53,9 +55,9 @@ const MainForm = ({ refetch }: { refetch: () => void }) => {
       setIsError(true);
       setError("Введите ссылку и её название");
     }
-  };
 
-  const { mutate, isSuccess } = api.links.sendURL.useMutation();
+    toast.error(error);
+  };
 
   const onSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault();
@@ -75,7 +77,10 @@ const MainForm = ({ refetch }: { refetch: () => void }) => {
     } as dataType);
   };
   useEffect(() => {
-    if (isSuccess) refetch();
+    if (isSuccess) {
+      refetch();
+      toast.success("Ссылка сокращена");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
@@ -124,44 +129,6 @@ const MainForm = ({ refetch }: { refetch: () => void }) => {
             });
           }}
         />
-
-        {isError && (
-          <div className="alert alert-error">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 shrink-0 stroke-current"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>{error}</span>
-          </div>
-        )}
-
-        {isSuccess && (
-          <div className="alert alert-success">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 shrink-0 stroke-current"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>Ссылка сокращена!</span>
-          </div>
-        )}
 
         <button type="submit" className="btn">
           Сократить
