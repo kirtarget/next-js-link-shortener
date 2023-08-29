@@ -7,8 +7,7 @@ import toast from "react-hot-toast";
 const slugGenerator = (): string => createId().slice(19);
 
 const MainForm = ({ refetch }: { refetch: () => void }) => {
-  const [name, setName] = useState<string | null>(null);
-  const [link, setLink] = useState<string | null>(null);
+  //State
   const [isError, setIsError] = useState<boolean | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [dbData, setDbData] = useState<dataType | null>({
@@ -17,14 +16,30 @@ const MainForm = ({ refetch }: { refetch: () => void }) => {
 
     shortLink: slugGenerator(),
   });
+
+  const { name, link }: { name: string | null; link: string | null } = dbData!;
+
+  //Server
   const { mutate, isSuccess } = api.links.sendURL.useMutation();
 
-  const errorHandler = () => {
+  //Toasts
+  useEffect(() => {
+    if (isSuccess) {
+      refetch();
+      toast.success("Ссылка сокращена");
+    }
+    if (isError) {
+      toast.error(error);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess, isError]);
+
+  const onErrorHandler = () => {
     const encodedUri = encodeURI(link ?? "");
     const regex = new RegExp(
       /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
     );
-    const validatedUri = encodedUri.match(regex);
+    const validatedUri = regex.test(encodedUri);
 
     setIsError(false);
     setError("");
@@ -46,22 +61,20 @@ const MainForm = ({ refetch }: { refetch: () => void }) => {
       setError("Введите ссылку");
     }
 
-    if (name!.length < 4 || name?.length == undefined) {
+    if (name?.length == undefined || name.length < 4) {
       setIsError(true);
       setError("Имя должно состоять минимум из 4 знаков");
     }
 
-    if (dbData?.link === undefined || dbData.name === undefined) {
+    if (link === undefined || name === undefined) {
       setIsError(true);
       setError("Введите ссылку и её название");
     }
-
-    toast.error(error);
   };
 
   const onSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault();
-    errorHandler();
+    onErrorHandler();
 
     if (isError) return;
 
@@ -76,13 +89,6 @@ const MainForm = ({ refetch }: { refetch: () => void }) => {
       shortLink: slugGenerator(),
     } as dataType);
   };
-  useEffect(() => {
-    if (isSuccess) {
-      refetch();
-      toast.success("Ссылка сокращена");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
 
   return (
     <div>
@@ -103,7 +109,6 @@ const MainForm = ({ refetch }: { refetch: () => void }) => {
           placeholder="Чтобы проще искать потом"
           className="input input-bordered my-2 w-full bg-white"
           onChange={(event) => {
-            setName(event.target.value);
             setIsError(false);
             setDbData({
               ...dbData!,
@@ -122,10 +127,9 @@ const MainForm = ({ refetch }: { refetch: () => void }) => {
           placeholder="https://sotkaonline.ru/"
           className="input input-bordered my-2 w-full bg-white"
           onChange={(event) => {
-            setLink(event.target.value);
             setDbData({
               ...dbData!,
-              link: event.target.value,
+              link: event.target.value.replace(/\s/g, ""),
             });
           }}
         />
