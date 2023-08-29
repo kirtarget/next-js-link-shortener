@@ -1,13 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import { createId } from "@paralleldrive/cuid2";
 import type { dataType } from "~/utils/app.types";
 
-// export type MainFormProps = {
-//     submitF: (e:React.FormEvent) => void
-// }
+const slugGenerator = (): string => createId().slice(19);
 
-const MainForm = () => {
+const MainForm = ({ refetch }: { refetch: () => void }) => {
   const [name, setName] = useState<string | null>(null);
   const [link, setLink] = useState<string | null>(null);
   const [isError, setIsError] = useState<boolean | null>(null);
@@ -16,7 +14,7 @@ const MainForm = () => {
     name: "",
     link: "",
 
-    shortLink: createId().slice(19),
+    shortLink: slugGenerator(),
   });
 
   const errorHandler = () => {
@@ -57,22 +55,29 @@ const MainForm = () => {
     }
   };
 
-  const sendLinkMutation = api.links.sendURL.useMutation();
+  const { mutate, isSuccess } = api.links.sendURL.useMutation();
 
   const onSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault();
     errorHandler();
 
-    setDbData({
-      ...dbData,
-      dateCreated: new Date(),
-    } as dataType);
-
     if (isError) return;
 
-    sendLinkMutation.mutate(dbData!);
-    return;
+    mutate({
+      ...dbData,
+      dateCreated: new Date(),
+      shortLink: slugGenerator(),
+    } as dataType);
+
+    setDbData({
+      ...dbData,
+      shortLink: slugGenerator(),
+    } as dataType);
   };
+  useEffect(() => {
+    if (isSuccess) refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
 
   return (
     <div>
@@ -83,7 +88,6 @@ const MainForm = () => {
           isError ? "border-rose-500" : ""
         } rounded-lg bg-blue-200 p-2 text-slate-900`}
       >
-        <p>{""}</p>
         <label htmlFor="nameInput" className="label">
           Введите название
         </label>
@@ -121,7 +125,7 @@ const MainForm = () => {
           }}
         />
 
-        {sendLinkMutation.isError && (
+        {isError && (
           <div className="alert alert-error">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +144,7 @@ const MainForm = () => {
           </div>
         )}
 
-        {sendLinkMutation.isSuccess && (
+        {isSuccess && (
           <div className="alert alert-success">
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -5,12 +5,10 @@ import MainForm from "./components/MainForm";
 import MainTable from "./components/MainTable";
 import { signIn, useSession, signOut } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
-import type { mainTableProps } from "~/utils/app.types";
 
 export default function Home() {
   const session = useSession();
-  const { data } = api.links.getAll.useQuery() as { data: mainTableProps };
-  const refetch = api.links.getAll.useQuery().refetch;
+  const { data, refetch } = api.links.getAll.useQuery();
 
   return (
     <>
@@ -36,7 +34,7 @@ export default function Home() {
               <div className="w-full ">
                 {session.data?.user.role === "ADMIN" ? (
                   <>
-                    <MainForm />
+                    <MainForm refetch={() => refetch()} />
                     {data ? (
                       <>
                         <button onClick={() => refetch()}>🔄</button>
