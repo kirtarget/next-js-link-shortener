@@ -5,7 +5,7 @@ const MainTable = ({ data }: { data: mainTableProps }) => {
   return (
     <div className="w-full overflow-x-auto">
       <table className="table table-md border">
-        <thead className="text-sm text-slate-900">
+        <thead className="text-sm">
           <tr>
             <th>Название</th>
             <th>Длинная ссылка</th>
@@ -14,7 +14,7 @@ const MainTable = ({ data }: { data: mainTableProps }) => {
             <th>Дата создания</th>
           </tr>
         </thead>
-        <tbody className="text-slate-700">
+        <tbody>
           {data
             ?.map((link) => (
               <tr key={link.dateCreated.toISOString()}>

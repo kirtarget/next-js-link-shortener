@@ -133,10 +133,18 @@ const MainForm = ({ refetch }: { refetch: () => void }) => {
             });
           }}
         />
-
-        <button type="submit" className="btn">
-          Сократить
-        </button>
+        <div className="flex justify-between">
+          <button type="submit" className="btn">
+            Сократить
+          </button>
+          <button
+            type="button"
+            className="btn btn-neutral"
+            onClick={() => refetch()}
+          >
+            Обновить таблицу
+          </button>
+        </div>
       </form>
     </div>
   );
