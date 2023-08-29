@@ -7,11 +7,17 @@ export const getServerSideProps = async (context: NextApiRequest) => {
     where: {
       shortLink: slug,
     },
+    select: {
+      link: true,
+    },
   });
 
   await prisma.shortLink.update({
     where: {
       shortLink: slug,
+    },
+    select: {
+      clicks: true,
     },
     data: {
       clicks: { increment: 1 },
