@@ -5,19 +5,19 @@ import type { dataType } from "~/utils/app.types";
 import toast from "react-hot-toast";
 
 const slugGenerator = (): string => createId().slice(19);
+const initialData: dataType = {
+  name: "",
+  link: "",
+  shortLink: slugGenerator(),
+};
 
 const MainForm = ({ refetch }: { refetch: () => void }) => {
   //State
   const [isError, setIsError] = useState<boolean | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [dbData, setDbData] = useState<dataType | null>({
-    name: "",
-    link: "",
+  const [dbData, setDbData] = useState<dataType>(initialData);
 
-    shortLink: slugGenerator(),
-  });
-
-  const { name, link }: { name: string | null; link: string | null } = dbData!;
+  const { name, link }: { name: string | null; link: string | null } = dbData;
 
   //Server
   const { mutate, isSuccess } = api.links.sendURL.useMutation();
@@ -33,6 +33,14 @@ const MainForm = ({ refetch }: { refetch: () => void }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess, isError]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setIsError(false);
+    setDbData((prev: dataType) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const onErrorHandler = () => {
     const encodedUri = encodeURI(link ?? "");
@@ -81,13 +89,9 @@ const MainForm = ({ refetch }: { refetch: () => void }) => {
     mutate({
       ...dbData,
       dateCreated: new Date(),
-      shortLink: slugGenerator(),
     } as dataType);
 
-    setDbData({
-      ...dbData,
-      shortLink: slugGenerator(),
-    } as dataType);
+    setDbData(initialData);
   };
 
   return (
@@ -104,17 +108,12 @@ const MainForm = ({ refetch }: { refetch: () => void }) => {
         </label>
         <input
           type="text"
-          name="nameInput"
+          name="name"
           id="nameInput"
+          value={dbData.name}
           placeholder="Чтобы проще искать потом"
           className="input input-bordered my-2 w-full bg-white"
-          onChange={(event) => {
-            setIsError(false);
-            setDbData({
-              ...dbData!,
-              name: event.target.value,
-            });
-          }}
+          onChange={handleChange}
         />
 
         <label htmlFor="linkInput" className="label">
@@ -122,16 +121,12 @@ const MainForm = ({ refetch }: { refetch: () => void }) => {
         </label>
         <input
           type="url"
-          name="linkInput"
+          name="link"
           id="linkInput"
+          value={dbData.link}
           placeholder="https://sotkaonline.ru/"
           className="input input-bordered my-2 w-full bg-white"
-          onChange={(event) => {
-            setDbData({
-              ...dbData!,
-              link: event.target.value.replace(/\s/g, ""),
-            });
-          }}
+          onChange={handleChange}
         />
         <div className="flex justify-between">
           <button type="submit" className="btn">
